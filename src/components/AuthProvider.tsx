@@ -22,24 +22,24 @@ export default function AuthProvider({
     fetchProfile();
   }, [fetchProfile]);
 
-  useEffect(() => {
-    if (!isLoading) {
-      console.log("AuthProvider: Check redirection", {
-        isAuthenticated,
-        pathname,
-      });
-      if (!isAuthenticated && pathname !== "/login" && pathname !== "/signup") {
-        console.log("AuthProvider: Redirecting to /login...");
-        router.replace("/login");
-      } else if (
-        isAuthenticated &&
-        (pathname === "/login" || pathname === "/signup")
-      ) {
-        console.log("AuthProvider: Redirecting to /...");
-        router.replace("/");
-      }
-    }
-  }, [isAuthenticated, isLoading, pathname, router]);
+  // useEffect(() => {
+  //   if (!isLoading) {
+  //     console.log("AuthProvider: Check redirection", {
+  //       isAuthenticated,
+  //       pathname,
+  //     });
+  //     if (!isAuthenticated && pathname !== "/login" && pathname !== "/signup") {
+  //       console.log("AuthProvider: Redirecting to /login...");
+  //       router.replace("/login");
+  //     } else if (
+  //       isAuthenticated &&
+  //       (pathname === "/login" || pathname === "/signup")
+  //     ) {
+  //       console.log("AuthProvider: Redirecting to /...");
+  //       router.replace("/");
+  //     }
+  //   }
+  // }, [isAuthenticated, isLoading, pathname, router]);
 
   // Show a loading screen while initializing to prevent content flash
   // if (isLoading && pathname !== "/login" && pathname !== "/signup") {

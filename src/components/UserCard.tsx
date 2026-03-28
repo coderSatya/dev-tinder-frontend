@@ -4,8 +4,13 @@ import { motion, useMotionValue, useTransform } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Check, X } from "lucide-react";
+import { FeedUser } from "@/types/feed.types";
 
-export default function UserCard({ user }) {
+interface UserCardProps {
+  user: FeedUser;
+}
+
+export default function UserCard({ user }: UserCardProps) {
   const x = useMotionValue(0);
 
   const rotate = useTransform(x, [-150, 150], [-8, 8]);
