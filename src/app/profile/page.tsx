@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuthStore } from "@/store/useAuthStore";
+import { useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -12,7 +13,11 @@ const STATS = [
 ];
 
 export default function ProfilePage() {
-  const { user } = useAuthStore();
+  const { user, connections, fetchConnections } = useAuthStore();
+
+  useEffect(() => {
+    fetchConnections();
+  }, [fetchConnections]);
   if (!user) return null;
 
   const fullName = `${user.firstName} ${user.lastName}`;
@@ -95,7 +100,12 @@ export default function ProfilePage() {
           <div className="pv-u2">
             <p className="pv-section-label">Your stats</p>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 10 }}>
-              {STATS.map(({ label, value, sub }) => (
+              {[
+                { label: "Matches", value: 12, sub: "developers" },
+                { label: "Connections", value: connections.length, sub: "active chats" },
+                { label: "Views", value: 48, sub: "this week" },
+                { label: "Liked by", value: 3, sub: "today" },
+              ].map(({ label, value, sub }) => (
                 <div key={label} className="pv-stat-card">
                   <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 9, letterSpacing: ".1em", color: "rgba(240,237,232,0.3)", textTransform: "uppercase" }}>{label}</span>
                   <span className="pv-display" style={{ fontSize: "1.8rem", color: label === "Matches" ? "#DC2626" : "#f0ede8" }}>{value}</span>

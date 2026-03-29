@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuthStore } from "@/store/useAuthStore";
+import { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -42,7 +43,13 @@ const TAGLINES = [
 ];
 
 export default function Home() {
-  const { user, isAuthenticated } = useAuthStore();
+  const { user, isAuthenticated, connections, fetchConnections } = useAuthStore();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchConnections();
+    }
+  }, [isAuthenticated, fetchConnections]);
 
   return (
     <>
@@ -99,7 +106,7 @@ export default function Home() {
               <div className="dt-fade-up-3" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: "1.75rem" }}>
                 {[
                   { label: "Matches", value: "12", sub: "developers" },
-                  { label: "Connections", value: "5", sub: "chatting" },
+                  { label: "Connections", value: connections.length.toString(), sub: "chatting" },
                   { label: "Profile views", value: "48", sub: "this week" },
                 ].map(({ label, value, sub }) => (
                   <div key={label} className="dt-stat">
