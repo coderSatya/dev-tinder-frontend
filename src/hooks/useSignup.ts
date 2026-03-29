@@ -16,7 +16,7 @@ export const useSignup = () => {
       if (response?.data) {
         setUser(response?.data);
       }
-      router.push("/");
+      router.push("/feed");
     },
     onError: (error: any) => {
       const errorMessage =

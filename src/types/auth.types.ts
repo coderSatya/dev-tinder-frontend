@@ -25,6 +25,8 @@ export interface SignupRequestData {
   lastName: string;
   emailId: string;
   password: string;
+  photoUrl?: string;
+  skills?: string[];
 }
 
 export interface SignupResponse {

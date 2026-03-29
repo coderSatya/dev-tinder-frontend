@@ -9,6 +9,8 @@ interface User {
   photoUrl?: string;
   about?: string;
   skills?: string[];
+  age:number,
+  gender:string
 }
 
 interface AuthState {

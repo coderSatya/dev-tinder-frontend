@@ -32,12 +32,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={cn("font-sans", geistSans.variable)}>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased dt-root`}
       >
         <QueryProvider>
           <AuthProvider>
             <Navbar />
-            {children}
+            <div className="dt-content">{children}</div>
           </AuthProvider>
         </QueryProvider>
         <ToastContainer

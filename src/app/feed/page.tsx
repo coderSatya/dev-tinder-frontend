@@ -25,21 +25,23 @@ export default async function Feed() {
 
     if (!feed || feed?.length === 0) {
         return (
-            <div className="flex h-[60vh] flex-col items-center justify-center gap-6 p-4">
-                <div className="p-6 rounded-full bg-gray-50 border border-gray-100 shadow-inner">
-                    <RefreshCw className="h-12 w-12 text-gray-300" />
+            <div className="flex h-[70vh] flex-col items-center justify-center gap-8 p-4 text-center">
+                <div className="p-8 rounded-full bg-white/5 border border-white/10 shadow-2xl relative">
+                    <RefreshCw className="h-14 w-14 text-white/20 animate-spin-slow" />
+                    <div className="absolute inset-0 bg-red-500/10 blur-2xl rounded-full" />
                 </div>
-                <div className="text-center space-y-2">
-                    <h3 className="text-2xl font-bold text-gray-800">No More Profiles</h3>
-                    <p className="text-gray-500 max-w-xs mx-auto">
-                        You've reached the end of the line! Check back later for more developers.
+                <div className="space-y-3 max-w-sm">
+                    <h3 className="dt-display text-4xl text-[#f0ede8]">
+                        End of the <span className="dt-display-italic text-[#DC2626]">Line</span>
+                    </h3>
+                    <p className="text-white/40 font-medium leading-relaxed">
+                        You've explored all currently active developers. Check back soon for fresh talent!
                     </p>
                 </div>
-                {/* Refresh needs to be a client component or a simple link */}
                 <form action="">
-                    <Button type="submit" variant="outline" className="rounded-full px-8">
-                        Refresh Feed
-                    </Button>
+                    <button type="submit" className="dt-btn-outline px-10 py-3 text-sm border-white/10 hover:border-red-500/50 hover:text-red-500">
+                        Refresh Discovery
+                    </button>
                 </form>
             </div>
         );

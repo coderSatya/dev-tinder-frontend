@@ -25,78 +25,75 @@ export default function UserCard({ user }: UserCardProps) {
       dragConstraints={{ left: 0, right: 0 }}
       onDragEnd={() => x.set(0)}
     >
-      <Card className="relative h-[520px] rounded-3xl overflow-hidden shadow-2xl border border-white/10 bg-black">
+      <Card className="relative h-[520px] rounded-[28px] overflow-hidden shadow-2xl border border-white/10 bg-[#141416]">
         {/* Image */}
         <img
           src={user.photoUrl}
           alt="user"
-          className="absolute inset-0 w-full h-full object-cover brightness-90"
+          className="absolute inset-0 w-full h-full object-cover brightness-[0.85]"
         />
 
         {/* Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0c0c0e] via-[#0c0c0e]/40 to-transparent" />
 
         {/* Swipe Indicators */}
         <motion.div
           style={{ opacity: rightOpacity }}
-          className="absolute top-6 right-6 text-green-400 font-bold text-lg"
+          className="absolute top-8 right-8 text-[#22c55e] font-black text-xl dt-display italic tracking-widest border-4 border-[#22c55e] px-4 py-1 rounded-xl rotate-12"
         >
-          CONNECT
+          LIKE
         </motion.div>
 
         <motion.div
           style={{ opacity: leftOpacity }}
-          className="absolute top-6 left-6 text-red-400 font-bold text-lg"
+          className="absolute top-8 left-8 text-[#DC2626] font-black text-xl dt-display italic tracking-widest border-4 border-[#DC2626] px-4 py-1 rounded-xl -rotate-12"
         >
-          IGNORE
+          NOPE
         </motion.div>
 
         {/* Bottom Content */}
-        <div className="absolute bottom-0 w-full p-6 text-white space-y-3">
-          {/* Name */}
-          <h2 className="text-3xl font-bold">
-            {user.firstName} {user.lastName}
-          </h2>
+        <div className="absolute bottom-0 w-full p-8 text-[#f0ede8] space-y-4">
+          <div className="space-y-1">
+            <h2 className="dt-display text-4xl">
+              {user.firstName} <span className="dt-display-italic text-[#DC2626]">{user.lastName}</span>
+            </h2>
+            <div className="dt-mono text-[10px] text-white/30 tracking-[0.2em] uppercase">
+              Full Stack Developer
+            </div>
+          </div>
 
           {/* Skills */}
           {user.skills?.length > 0 && (
             <div className="flex flex-wrap gap-2">
-              {user.skills.slice(0, 3).map((skill) => (
-                <span
-                  key={skill}
-                  className="px-3 py-1 text-xs rounded-full bg-white/10 border border-white/20 backdrop-blur-md"
-                >
+              {user.skills.slice(0, 4).map((skill) => (
+                <span key={skill} className="dt-chip bg-white/5 border-white/10">
                   {skill}
                 </span>
               ))}
-              {user.skills.length > 3 && (
-                <span className="px-3 py-1 text-xs rounded-full bg-white/5 text-white/60">
-                  +{user.skills.length - 3}
-                </span>
-              )}
             </div>
           )}
 
           {/* About */}
-          <p className="text-sm text-white/70 line-clamp-2">
+          <p className="text-sm text-white/50 line-clamp-2 font-medium leading-relaxed">
             {user.about || "No bio available"}
           </p>
 
           {/* Buttons */}
-          <div className="flex gap-3 mt-3">
-            <Button
+          <div className="flex gap-4 pt-2">
+            <button
               onClick={() => console.log("Ignored")}
-              className="flex-1 bg-white/10 text-white hover:bg-red-500"
+              className="flex-1 h-12 flex items-center justify-center rounded-2xl bg-white/5 border border-white/10 text-white/70 hover:bg-[#DC2626] hover:text-white hover:border-[#DC2626] transition-all active:scale-95 group"
             >
-              <X className="mr-2" /> Ignore
-            </Button>
+              <X className="w-5 h-5 group-hover:scale-110 transition-transform" />
+            </button>
 
-            <Button
+            <button
               onClick={() => console.log("Connected")}
-              className="flex-1 bg-white text-black font-bold hover:bg-green-400"
+              className="flex-[2] h-12 flex items-center justify-center rounded-2xl bg-[#DC2626] text-white font-bold hover:bg-[#b91c1c] shadow-lg shadow-red-900/20 transition-all active:scale-95 group"
             >
-              <Check className="mr-2" /> Connect
-            </Button>
+              <Check className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" /> 
+              Connect
+            </button>
           </div>
         </div>
       </Card>

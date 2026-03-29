@@ -5,6 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -40,58 +41,83 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-center">Login to Dev Tinder</CardTitle>
-          <CardDescription className="text-center">
-            Enter your email and password to continue
+    <div className="dt-signup-root">
+      <div className="dt-glow-br" />
+
+      <Card className="dt-card dt-card-glass dt-fadein w-full max-w-md border-none shadow-2xl overflow-hidden">
+        <CardHeader className="space-y-2 pb-8 text-center pt-8">
+          <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 48, height: 48, borderRadius: "50%", background: "rgba(220,38,38,0.1)", border: "1px solid rgba(220,38,38,0.2)", margin: "0 auto 1rem" }}>
+            <Eye size={20} color="#DC2626" />
+          </div>
+          <CardTitle className="dt-display text-4xl text-[#f0ede8]">
+            Welcome <span className="dt-display-italic text-[#DC2626]">Back</span>
+          </CardTitle>
+          <CardDescription className="text-white/40 font-medium font-sans text-sm">
+            Enter your credentials to continue your journey
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="emailId">Email</Label>
-              <Input
+        <CardContent className="px-8 pb-10">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <div className="space-y-1">
+              <label htmlFor="emailId" className="dt-label">Email Address</label>
+              <input
                 id="emailId"
                 type="email"
-                placeholder="Enter your email"
+                placeholder="name@example.com"
                 {...register("emailId")}
-                className={errors.emailId ? "border-red-500" : ""}
+                className={`dt-input-custom ${errors.emailId ? "error" : ""}`}
               />
               {errors.emailId && (
-                <p className="text-sm text-red-500">{errors.emailId.message}</p>
+                <p className="dt-error-text">{errors.emailId.message}</p>
               )}
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+            <div className="space-y-1">
+              <div className="flex items-center justify-between">
+                <label htmlFor="password" className="dt-label">Password</label>
+                <a href="#" className="text-[10px] text-red-500/60 hover:text-red-500 font-bold uppercase tracking-wider transition-colors dt-mono">Forgot?</a>
+              </div>
               <div className="relative">
-                <Input
+                <input
                   id="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="Enter your password"
+                  placeholder="••••••••"
                   {...register("password")}
-                  className={errors.password ? "border-red-500 pr-10" : "pr-10"}
+                  className={`dt-input-custom pr-12 ${errors.password ? "error" : ""}`}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700"
+                  className="absolute inset-y-0 right-0 flex items-center pr-4 text-white/20 hover:text-white/40 transition-colors"
                 >
                   {showPassword ? (
-                    <EyeOff className="h-5 w-5" />
+                    <EyeOff className="h-4 w-4" />
                   ) : (
-                    <Eye className="h-5 w-5" />
+                    <Eye className="h-4 w-4" />
                   )}
                 </button>
               </div>
               {errors.password && (
-                <p className="text-sm text-red-500">{errors.password.message}</p>
+                <p className="dt-error-text">{errors.password.message}</p>
               )}
             </div>
-            <Button type="submit" className="w-full" disabled={isPending}>
-              {isPending ? "Logging in..." : "Login"}
-            </Button>
+
+            <button
+              type="submit"
+              disabled={isPending}
+              className="dt-submit-btn"
+            >
+              {isPending ? (
+                <span className="flex items-center gap-2">
+                  <div className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  Authenticating...
+                </span>
+              ) : "Sign In →"}
+            </button>
+
+            <p className="text-center text-sm text-white/30 pt-2 font-sans">
+              Don&apos;t have an account?{" "}
+              <Link href="/signup" className="text-red-500/80 hover:text-red-500 font-bold transition-colors">Create one</Link>
+            </p>
           </form>
         </CardContent>
       </Card>
