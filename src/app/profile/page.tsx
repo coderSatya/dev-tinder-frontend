@@ -5,19 +5,14 @@ import { useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-const STATS = [
-  { label: "Matches", key: "matches", value: 12, sub: "developers" },
-  { label: "Connections", key: "connections", value: 5, sub: "active chats" },
-  { label: "Views", key: "views", value: 48, sub: "this week" },
-  { label: "Liked by", key: "likes", value: 3, sub: "today" },
-];
-
 export default function ProfilePage() {
-  const { user, connections, fetchConnections } = useAuthStore();
+  const { user, connections, requests, fetchConnections, fetchRequests } = useAuthStore();
 
   useEffect(() => {
     fetchConnections();
-  }, [fetchConnections]);
+    fetchRequests();
+  }, [fetchConnections, fetchRequests]);
+
   if (!user) return null;
 
   const fullName = `${user.firstName} ${user.lastName}`;
@@ -55,12 +50,10 @@ export default function ProfilePage() {
         <div className="pv-glow1" />
         <div className="pv-glow2" />
 
-        {/* ── Hero banner ── */}
         <div className="pv-u1" style={{ position: "relative", height: 220, overflow: "hidden", zIndex: 1 }}>
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg,#1a0808 0%,#0c0c0e 60%,#080c1a 100%)" }} />
           <div style={{ position: "absolute", inset: 0, backgroundImage: "repeating-linear-gradient(45deg,rgba(220,38,38,0.04) 0,rgba(220,38,38,0.04) 1px,transparent 0,transparent 50%)", backgroundSize: "20px 20px" }} />
           <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "flex-end", padding: "0 2rem 1.5rem", gap: "1.5rem", maxWidth: 860, margin: "0 auto", left: 0, right: 0 }}>
-            {/* Avatar */}
             <div style={{ position: "relative", flexShrink: 0 }}>
               {user.photoUrl ? (
                 <Image
@@ -78,7 +71,6 @@ export default function ProfilePage() {
               <span style={{ position: "absolute", bottom: 6, right: 6, width: 18, height: 18, borderRadius: "50%", background: "#22c55e", border: "3px solid #0c0c0e", display: "block" }} />
             </div>
 
-            {/* Name + status */}
             <div style={{ paddingBottom: 4 }}>
               <p style={{ fontFamily: "'DM Mono',monospace", fontSize: 10, letterSpacing: ".1em", color: "rgba(240,237,232,0.35)", textTransform: "uppercase", marginBottom: 5 }}>
                 {user.gender? user.gender.charAt(0).toUpperCase() + user.gender.slice(1) : "Developer"}
@@ -93,10 +85,7 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* ── Body ── */}
         <div style={{ maxWidth: 860, margin: "0 auto", padding: "1.5rem 2rem 3rem", display: "flex", flexDirection: "column", gap: "1.5rem", position: "relative", zIndex: 1 }}>
-
-          {/* Stats */}
           <div className="pv-u2">
             <p className="pv-section-label">Your stats</p>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 10 }}>
@@ -104,18 +93,17 @@ export default function ProfilePage() {
                 { label: "Matches", value: 12, sub: "developers" },
                 { label: "Connections", value: connections.length, sub: "active chats" },
                 { label: "Views", value: 48, sub: "this week" },
-                { label: "Liked by", value: 3, sub: "today" },
+                { label: "Liked by", value: requests.length, sub: "today" },
               ].map(({ label, value, sub }) => (
                 <div key={label} className="pv-stat-card">
                   <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 9, letterSpacing: ".1em", color: "rgba(240,237,232,0.3)", textTransform: "uppercase" }}>{label}</span>
-                  <span className="pv-display" style={{ fontSize: "1.8rem", color: label === "Matches" ? "#DC2626" : "#f0ede8" }}>{value}</span>
+                  <span className="pv-display" style={{ fontSize: "1.8rem", color: label === "Matches" || label === "Liked by" ? "#DC2626" : "#f0ede8" }}>{value}</span>
                   <span style={{ fontSize: 11, color: "rgba(240,237,232,0.3)" }}>{sub}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Profile strength */}
           <div className="pv-u2">
             <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 14, padding: "16px 18px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
@@ -137,7 +125,6 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          {/* About */}
           {user.about && (
             <div className="pv-u3">
               <p className="pv-section-label">About</p>
@@ -149,7 +136,6 @@ export default function ProfilePage() {
 
           <div className="pv-divider" />
 
-          {/* Skills */}
           {user.skills && user.skills.length > 0 && (
             <div className="pv-u3">
               <p className="pv-section-label">Stack</p>
@@ -163,7 +149,6 @@ export default function ProfilePage() {
 
           <div className="pv-divider" />
 
-          {/* Details */}
           <div className="pv-u4">
             <p className="pv-section-label">Details</p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
@@ -181,7 +166,33 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          {/* Edit CTA */}
+          {requests.length > 0 && (
+            <div className="pv-u5">
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+                <p className="pv-section-label">Pending Requests ({requests.length})</p>
+                <Link href="/request" style={{ fontSize: 11, color: "#DC2626", textDecoration: "none", fontWeight: 600 }}>Review all →</Link>
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                {requests.slice(0, 3).map((req) => (
+                  <div key={req._id} className="pv-detail-card" style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                    {req.fromUserId.photoUrl ? (
+                      <img src={req.fromUserId.photoUrl} alt="" style={{ width: 40, height: 40, borderRadius: "50%", objectFit: "cover", border: "1px solid rgba(220,38,38,0.2)" }} />
+                    ) : (
+                      <div style={{ width: 40, height: 40, borderRadius: "50%", background: "rgba(220,38,38,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, fontWeight: 700, color: "#DC2626" }}>
+                        {req.fromUserId.firstName.charAt(0)}
+                      </div>
+                    )}
+                    <div style={{ flex: 1 }}>
+                      <p style={{ margin: 0, fontWeight: 600, fontSize: 14, color: "#f0ede8" }}>{req.fromUserId.firstName} {req.fromUserId.lastName}</p>
+                      <p style={{ margin: 0, fontSize: 11, color: "rgba(240,237,232,0.4)" }} className="truncate max-w-[200px]">{req.fromUserId.about || "Wants to connect"}</p>
+                    </div>
+                    <Link href="/request" className="pv-chip" style={{ fontSize: 10 }}>Review</Link>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div className="pv-u5">
             <Link
               href="/profile/edit"
@@ -190,7 +201,6 @@ export default function ProfilePage() {
               Edit Profile →
             </Link>
           </div>
-
         </div>
       </div>
     </>

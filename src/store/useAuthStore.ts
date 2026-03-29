@@ -1,7 +1,10 @@
 import { create } from "zustand";
 import { fetchProfileView } from "@/api/profile.api";
 import { getConnections } from "@/api/connection.api";
+import { getReceivedRequests } from "@/api/request.api";
+import { getFeed } from "@/api/feed.api";
 import { Connection } from "@/types/connection.types";
+import { ConnectionRequest } from "@/types/request.types";
 
 interface User {
   _id: string;
@@ -20,11 +23,17 @@ interface AuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
   connections: Connection[];
+  requests: ConnectionRequest[];
+  feed: Connection[];
   setUser: (user: User) => void;
   setConnections: (connections: Connection[]) => void;
+  setRequests: (requests: ConnectionRequest[]) => void;
+  setFeed: (feed: Connection[]) => void;
   logout: () => void;
   fetchProfile: () => Promise<void>;
   fetchConnections: () => Promise<void>;
+  fetchRequests: () => Promise<void>;
+  fetchFeed: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -32,9 +41,13 @@ export const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: false,
   isLoading: true,
   connections: [],
+  requests: [],
+  feed: [],
   setUser: (user) => set({ user, isAuthenticated: true, isLoading: false }),
   setConnections: (connections) => set({ connections }),
-  logout: () => set({ user: null, isAuthenticated: false, isLoading: false, connections: [] }),
+  setRequests: (requests) => set({ requests }),
+  setFeed: (feed) => set({ feed }),
+  logout: () => set({ user: null, isAuthenticated: false, isLoading: false, connections: [], requests: [], feed: [] }),
   fetchProfile: async () => {
     set({ isLoading: true });
     try {
@@ -58,6 +71,24 @@ export const useAuthStore = create<AuthState>((set) => ({
       }
     } catch (error) {
       console.error("Fetch connections error:", error);
+    }
+  },
+  fetchRequests: async () => {
+    try {
+      const response = await getReceivedRequests();
+      if (response && response.data) {
+        set({ requests: response.data });
+      }
+    } catch (error) {
+      console.error("Fetch requests error:", error);
+    }
+  },
+  fetchFeed: async () => {
+    try {
+      const data = await getFeed();
+      set({ feed: data });
+    } catch (error) {
+      console.error("Fetch feed error:", error);
     }
   },
 }));

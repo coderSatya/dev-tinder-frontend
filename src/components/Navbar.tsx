@@ -9,10 +9,17 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
 export default function Navbar() {
-  const { user, isAuthenticated, logout } = useAuthStore();
+  const { user, isAuthenticated, logout, requests, connections, fetchRequests, fetchConnections } = useAuthStore();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchRequests();
+      fetchConnections();
+    }
+  }, [isAuthenticated, fetchRequests, fetchConnections]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -118,11 +125,34 @@ export default function Navbar() {
 
                   <Link
                     href="/connection"
-                    className="flex items-center gap-3 px-4 py-2.5 text-sm text-white/60 hover:bg-white/5 hover:text-[#f0ede8] transition-colors group"
+                    className="flex items-center justify-between gap-3 px-4 py-2.5 text-sm text-white/60 hover:bg-white/5 hover:text-[#f0ede8] transition-colors group"
                     onClick={() => setIsDropdownOpen(false)}
                   >
-                    <Settings className="h-4 w-4 group-hover:scale-110 transition-transform" />
-                    <span className="font-medium">Connections</span>
+                    <div className="flex items-center gap-3">
+                      <Settings className="h-4 w-4 group-hover:scale-110 transition-transform" />
+                      <span className="font-medium">Connections</span>
+                    </div>
+                    {connections.length > 0 && (
+                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/10 text-[10px] font-bold text-white/60">
+                        {connections.length}
+                      </span>
+                    )}
+                  </Link>
+
+                  <Link
+                    href="/request"
+                    className="flex items-center justify-between gap-3 px-4 py-2.5 text-sm text-white/60 hover:bg-white/5 hover:text-[#f0ede8] transition-colors group"
+                    onClick={() => setIsDropdownOpen(false)}
+                  >
+                    <div className="flex items-center gap-3">
+                      <Flame className="h-4 w-4 group-hover:scale-110 transition-transform" />
+                      <span className="font-medium">Requests</span>
+                    </div>
+                    {requests.length > 0 && (
+                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white">
+                        {requests.length}
+                      </span>
+                    )}
                   </Link>
 
                   <div className="h-px bg-white/5 my-1" />
