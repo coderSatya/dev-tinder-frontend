@@ -1,5 +1,5 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { getFeed, sendConnectionRequest } from "@/api/feed.api";
+import { getFeed } from "@/api/feed.api";
 import { useFeedStore } from "@/store/useFeedStore";
 import { toast } from "react-toastify";
 
@@ -23,27 +23,27 @@ export const useFeed = () => {
     },
   });
 
-  const requestMutation = useMutation({
-    mutationFn: ({ status, userId }: { status: string; userId: string }) =>
-      sendConnectionRequest(status, userId),
-    onSuccess: (data, variables) => {
-      // Only toast if message exists, or generic success
-      if (data.success) {
-        toast.success(data.message || "Request sent!");
-        removeUserFromFeed(variables.userId);
-      }
-    },
-    onError: (error: any) => {
-      toast.error(error?.response?.data?.message || "Something went wrong");
-    },
-  });
+  // const requestMutation = useMutation({
+  //   mutationFn: ({ status, userId }: { status: string; userId: string }) =>
+  //     sendConnectionRequest(status, userId),
+  //   onSuccess: (data, variables) => {
+  //     // Only toast if message exists, or generic success
+  //     if (data.success) {
+  //       toast.success(data.message || "Request sent!");
+  //       removeUserFromFeed(variables.userId);
+  //     }
+  //   },
+  //   onError: (error: any) => {
+  //     toast.error(error?.response?.data?.message || "Something went wrong");
+  //   },
+  // });
 
   return {
     feed: feedQuery.data,
     isLoading: feedQuery.isLoading,
     isError: feedQuery.isError,
-    sendRequest: requestMutation.mutate,
-    isRequestLoading: requestMutation.isPending,
+    // sendRequest: requestMutation.mutate,
+    // isRequestLoading: requestMutation.isPending,
     refetch: feedQuery.refetch,
   };
 };

@@ -1,7 +1,7 @@
 import axiosInstance from "@/lib/axios";
-import { Connection } from "@/types/connection.types";
+import { FeedResponse } from "@/types/feed.types";
 
-export const getFeed = async (): Promise<Connection[]> => {
-  const response = await axiosInstance.get<Connection[]>("/user/feed");
+export const getFeed = async (): Promise<FeedResponse> => {
+  const response = await axiosInstance.get<FeedResponse>("/user/feed");
   return response.data;
 };

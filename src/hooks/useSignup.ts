@@ -14,7 +14,7 @@ export const useSignup = () => {
     onSuccess: (response) => {
       toast.success(response.message || "Signup successful!");
       if (response?.data) {
-        setUser(response?.data);
+        setUser(response?.data as any);
       }
       router.push("/feed");
     },

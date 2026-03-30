@@ -17,6 +17,8 @@ export interface LoginResponse {
     createdAt?: string;
     updatedAt?: string;
     __v?: number;
+    age?: number;
+    gender?: string;
   };
 }
 
@@ -43,5 +45,7 @@ export interface SignupResponse {
     createdAt?: string;
     updatedAt?: string;
     __v?: number;
+    age?: number;
+    gender?: string;
   };
 }

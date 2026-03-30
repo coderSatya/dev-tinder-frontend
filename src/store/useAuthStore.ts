@@ -5,6 +5,7 @@ import { getReceivedRequests } from "@/api/request.api";
 import { getFeed } from "@/api/feed.api";
 import { Connection } from "@/types/connection.types";
 import { ConnectionRequest } from "@/types/request.types";
+import { FeedResponse } from "@/types/feed.types";
 
 interface User {
   _id: string;
@@ -24,11 +25,11 @@ interface AuthState {
   isLoading: boolean;
   connections: Connection[];
   requests: ConnectionRequest[];
-  feed: Connection[];
+  feed: FeedResponse | null;
   setUser: (user: User) => void;
   setConnections: (connections: Connection[]) => void;
   setRequests: (requests: ConnectionRequest[]) => void;
-  setFeed: (feed: Connection[]) => void;
+  setFeed: (feed: FeedResponse) => void;
   logout: () => void;
   fetchProfile: () => Promise<void>;
   fetchConnections: () => Promise<void>;
@@ -42,12 +43,20 @@ export const useAuthStore = create<AuthState>((set) => ({
   isLoading: true,
   connections: [],
   requests: [],
-  feed: [],
+  feed: null,
   setUser: (user) => set({ user, isAuthenticated: true, isLoading: false }),
   setConnections: (connections) => set({ connections }),
   setRequests: (requests) => set({ requests }),
   setFeed: (feed) => set({ feed }),
-  logout: () => set({ user: null, isAuthenticated: false, isLoading: false, connections: [], requests: [], feed: [] }),
+  logout: () =>
+    set({
+      user: null,
+      isAuthenticated: false,
+      isLoading: false,
+      connections: [],
+      requests: [],
+      feed: null,
+    }),
   fetchProfile: async () => {
     set({ isLoading: true });
     try {

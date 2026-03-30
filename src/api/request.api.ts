@@ -1,5 +1,4 @@
 import axiosInstance from "@/lib/axios";
-import { ENDPOINTS } from "@/constants/api.constants";
 import { ConnectionRequestResponse } from "@/types/request.types";
 
 export const getReceivedRequests = async (): Promise<ConnectionRequestResponse> => {

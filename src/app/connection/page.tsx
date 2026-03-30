@@ -44,7 +44,7 @@ export default async function ConnectionPage() {
           </h1>
           <p className="text-white/40 max-w-lg animate-in fade-in slide-in-from-bottom-6 duration-1000">
             You have {connections.length} active connection{connections.length !== 1 ? 's' : ''}. 
-            These are the developers you've matched with.
+            These are the developers you&apos;ve matched with.
           </p>
         </div>
 

@@ -14,7 +14,7 @@ export const useLogin = () => {
     onSuccess: (response) => {
       toast.success(response.message || "Login successful!");
       if (response?.data) {
-        setUser(response?.data);
+        setUser(response?.data as any);
       }
       router.push("/feed");
     },

@@ -257,8 +257,8 @@ export default function Home() {
                 Developers near your stack
               </p>
               <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-                {feed && feed.length > 0 ? (
-                  feed.slice(0, 3).map((p, i) => (
+                {feed && feed.data?.length > 0 ? (
+                  feed.data?.slice(0, 3).map((p, i) => (
                     <div key={p._id}>
                       <div
                         style={{
@@ -322,7 +322,7 @@ export default function Home() {
                           </Link>
                         </div>
                       </div>
-                      {i < Math.min(feed.length, 3) - 1 && (
+                      {i < Math.min(feed.data.length, 3) - 1 && (
                         <div className="dt-divider" />
                       )}
                     </div>
