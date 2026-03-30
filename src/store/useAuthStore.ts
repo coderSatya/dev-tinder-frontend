@@ -35,6 +35,7 @@ interface AuthState {
   fetchConnections: () => Promise<void>;
   fetchRequests: () => Promise<void>;
   fetchFeed: () => Promise<void>;
+  sendConnectionRequest: (status: "interested" | "ignored", receiverId: string) => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -98,6 +99,29 @@ export const useAuthStore = create<AuthState>((set) => ({
       set({ feed: data });
     } catch (error) {
       console.error("Fetch feed error:", error);
+    }
+  },
+  sendConnectionRequest: async (status, receiverId) => {
+    const { toast } = await import("react-toastify");
+    try {
+      const response = await (await import("@/api/request.api")).sendRequest(status, receiverId);
+      if (response && response.message) {
+        toast.success(response.message, { autoClose: 1000 });
+        // Remove user from local feed state
+        set((state) => {
+          if (!state.feed || !state.feed.data) return state;
+          const updatedData = state.feed.data.filter(u => u._id !== receiverId);
+          return {
+            feed: {
+              ...state.feed,
+              data: updatedData
+            }
+          };
+        });
+      }
+    } catch (error: any) {
+      const msg = error?.response?.data?.message || "Failed to send request";
+      toast.error(msg, { autoClose: 1000 });
     }
   },
 }));
