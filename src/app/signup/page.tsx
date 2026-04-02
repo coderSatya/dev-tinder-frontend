@@ -25,7 +25,13 @@ const signupSchema = yup.object({
   firstName: yup.string().min(2, "Min 2 characters").required("Required"),
   lastName: yup.string().min(2, "Min 2 characters").required("Required"),
   emailId: yup.string().email("Invalid email").required("Required"),
-  password: yup.string().min(6, "Min 6 characters").required("Required"),
+  password: yup
+    .string()
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+      "Must be 8+ chars & include uppercase, lowercase, number, and special char"
+    )
+    .required("Required"),
   gender: yup.string().oneOf(["male", "female", "other"], "Select a gender").required("Required"),
   about: yup.string().max(200, "Max 200 characters").optional(),
   photoUrl: yup.string().required("Profile photo is required"),

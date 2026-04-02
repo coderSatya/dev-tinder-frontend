@@ -5,14 +5,14 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Check, X } from "lucide-react";
 import { FeedUser } from "@/types/feed.types";
-import { useAuthStore } from "@/store/useAuthStore";
+import { useSendRequest } from "@/hooks/useSendRequest";
 
 interface UserCardProps {
   user: FeedUser;
 }
 
 export default function UserCard({ user }: UserCardProps) {
-  const sendRequest = useAuthStore((state) => state.sendConnectionRequest);
+  const { handleSendRequest } = useSendRequest();
   const x = useMotionValue(0);
 
   const rotate = useTransform(x, [-150, 150], [-8, 8]);
@@ -27,9 +27,9 @@ export default function UserCard({ user }: UserCardProps) {
       dragConstraints={{ left: 0, right: 0 }}
       onDragEnd={(_, info) => {
         if (info.offset.x > 100) {
-          sendRequest("interested", user?._id);
+          handleSendRequest("interested", user?._id);
         } else if (info.offset.x < -100) {
-          sendRequest("ignored", user?._id);
+          handleSendRequest("ignored", user?._id);
         }
         x.set(0);
       }}
@@ -96,14 +96,14 @@ export default function UserCard({ user }: UserCardProps) {
           {/* Buttons */}
           <div className="flex gap-4 pt-2">
             <button
-              onClick={() => sendRequest("ignored", user?._id)}
+              onClick={() => handleSendRequest("ignored", user?._id)}
               className="flex-1 h-12 flex items-center justify-center rounded-2xl bg-white/5 border border-white/10 text-white/70 hover:bg-[#DC2626] hover:text-white hover:border-[#DC2626] transition-all active:scale-95 group"
             >
               <X className="w-5 h-5 group-hover:scale-110 transition-transform" />
             </button>
 
             <button
-              onClick={() => sendRequest("interested", user?._id)}
+              onClick={() => handleSendRequest("interested", user?._id)}
               className="flex-[2] h-12 flex items-center justify-center rounded-2xl bg-[#DC2626] text-white font-bold hover:bg-[#b91c1c] shadow-lg shadow-red-900/20 transition-all active:scale-95 group"
             >
               <Check className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
