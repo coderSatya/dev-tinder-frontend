@@ -1,24 +1,28 @@
 "use client";
 
-import { useEffect } from "react";
-import { useAuthStore } from "@/store/useAuthStore";
-import { useRequest } from "./useRequest";
+import { useRequests } from "@/hooks/useRequests";
 import { ConnectionRequest } from "@/types/request.types";
-import { Check, X, User as UserIcon, Clock, Flame } from "lucide-react";
+import { Check, X, User as UserIcon, Clock, Flame, Loader2 } from "lucide-react";
 import Link from "next/link";
 
-interface RequestListProps {
-  initialRequests: ConnectionRequest[];
-}
+export default function RequestList() {
+  const { requests, isLoading, isError, isProcessing, handleReview } = useRequests();
 
-export default function RequestList({ initialRequests }: RequestListProps) {
-  const { setRequests } = useAuthStore();
-  const { requests, isProcessing, handleReview } = useRequest();
+  if (isLoading) {
+    return (
+      <div className="flex h-[60vh] items-center justify-center">
+        <Loader2 className="h-8 w-8 text-red-500 animate-spin" />
+      </div>
+    );
+  }
 
-  // Sync initial server data with Zustand store
-  useEffect(() => {
-    setRequests(initialRequests);
-  }, [initialRequests, setRequests]);
+  if (isError) {
+    return (
+      <div className="flex h-[60vh] items-center justify-center text-white/40">
+        Failed to load requests. Please try again.
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -38,8 +42,8 @@ export default function RequestList({ initialRequests }: RequestListProps) {
 
       {requests.length > 0 ? (
         <div className="grid grid-cols-1 gap-4">
-          {requests.map((req, idx) => (
-            <div 
+          {requests.map((req: ConnectionRequest, idx: number) => (
+            <div
               key={req._id}
               className="dt-card dt-card-glass group flex flex-col md:flex-row items-center gap-6 p-6 animate-in fade-in slide-in-from-bottom-8 duration-700"
               style={{ animationDelay: `${idx * 100}ms` }}
@@ -48,9 +52,9 @@ export default function RequestList({ initialRequests }: RequestListProps) {
               <div className="flex items-center gap-5 flex-1 w-full">
                 <div className="relative shrink-0">
                   {req.fromUserId.photoUrl ? (
-                    <img 
-                      src={req.fromUserId.photoUrl} 
-                      alt={req.fromUserId.firstName} 
+                    <img
+                      src={req.fromUserId.photoUrl}
+                      alt={req.fromUserId.firstName}
                       className="w-20 h-20 rounded-2xl object-cover ring-2 ring-white/10 group-hover:ring-red-500/50 transition-all duration-300 shadow-xl"
                     />
                   ) : (
@@ -89,14 +93,14 @@ export default function RequestList({ initialRequests }: RequestListProps) {
 
               {/* Actions Section */}
               <div className="flex items-center gap-3 w-full md:w-auto pt-4 md:pt-0 border-t md:border-t-0 border-white/5">
-                <Link 
+                <Link
                   href={`/profile/${req.fromUserId._id}`}
                   className="flex-1 md:flex-none px-6 py-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 text-white text-xs font-semibold transition-all text-center"
                 >
                   Profile
                 </Link>
                 <div className="flex gap-2">
-                  <button 
+                  <button
                     onClick={() => handleReview("rejected", req._id)}
                     disabled={isProcessing === req._id}
                     className="p-3 rounded-xl bg-red-500/5 border border-red-500/10 hover:bg-red-500/10 hover:border-red-500/30 text-red-500/60 hover:text-red-500 transition-all disabled:opacity-50"
@@ -104,7 +108,7 @@ export default function RequestList({ initialRequests }: RequestListProps) {
                   >
                     <X className="h-5 w-5" />
                   </button>
-                  <button 
+                  <button
                     onClick={() => handleReview("accepted", req._id)}
                     disabled={isProcessing === req._id}
                     className="p-3 rounded-xl bg-green-500/10 border border-green-500/20 hover:bg-green-500 hover:border-green-500 text-green-500 hover:text-white transition-all disabled:opacity-50 shadow-lg shadow-green-900/10"
@@ -131,8 +135,8 @@ export default function RequestList({ initialRequests }: RequestListProps) {
           <p className="text-white/40 mb-8">
             Check back later for new connection requests or keep swiping to find more developers!
           </p>
-          <Link 
-            href="/feed" 
+          <Link
+            href="/feed"
             className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-red-500 text-white font-bold hover:bg-red-600 transition-all shadow-lg shadow-red-900/40"
           >
             Explore Feed
